@@ -3,5 +3,5 @@ module.exports = exports = {
   user : 'root',
   password : '',
   database : 'chat',
-  port: 3000
+  port: 3306
 };

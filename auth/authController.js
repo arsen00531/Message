@@ -1,10 +1,5 @@
-const bcrypt = require('bcryptjs');
 const mysql = require('mysql');
-const connect = require('./db.js');
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+const connect = require('../db/db.js');
 var jwt = require('jsonwebtoken');
 
 const connection = mysql.createPool(connect);
@@ -16,7 +11,7 @@ class authController {
 			const password = req.body.password;
 			const candidate = connection.query("SELECT * FROM `users` WHERE login = '"+ userName +"' ", function(err, row) {
 				if(row.length > 0) {
-					res.render('log/logall.ejs', {error: "Такой пользователь уже существует"})
+					res.render('pages/logall.ejs', {error: "Такой пользователь уже существует"})
 				}
 				else {
 					const user = connection.query("INSERT INTO `users` (login, password) VALUES ('"+ userName +"', '"+ password +"') ");
@@ -48,7 +43,7 @@ class authController {
 						}
 						else {
 							// Password is not correct
-							res.render('log/unlogged.ejs', {error: "Не верный пароль"})
+							res.render('pages/unlogged.ejs', {error: "Не верный пароль"})
 						}
 					}
 					else {
@@ -58,7 +53,7 @@ class authController {
 				}
 				else {
 					// user was not registered
-					res.render('log/logall.ejs', {error: "Зарегистрируйся"})
+					res.render('pages/logall.ejs', {error: "Зарегистрируйся"})
 				}
 			});
 		}
@@ -101,7 +96,7 @@ class authController {
 		  var decoded = jwt.decode(name)
 		  var result = connection.query("SELECT * FROM `users` WHERE login NOT IN ('"+ decoded +"')", function(err, row) {
 		  	if(err) return console.log(err)
-		  	res.render('users.ejs', {row: row, name: decoded})
+		  	res.render('pages/users.ejs', {row: row, name: decoded})
 		  });
 		}
 

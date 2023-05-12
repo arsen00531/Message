@@ -4,16 +4,15 @@ const server = require('http').createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server)
 const multer  = require("multer");
-const authRouter = require('./authRouter.js');
+const authRouter = require('./auth/authRouter.js');
 const mysql = require('mysql');
-const connect = require('./db.js')
+const connect = require('./db/db.js')
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const PORT = 3000;
 
 const connection = mysql.createPool(connect, (err) => {console.log(err)});
-console.log(connection)
 
 app.use(express.json())
 
@@ -47,25 +46,24 @@ function getDecodedName(cookies) {
 app.get('/', (req, res) => {
 	var cooki = req.headers.cookie;
 	if(cooki === undefined) {
-		res.render('log/unlogged.ejs', {error: undefined})
+		res.render('auth/unlogged.ejs', {error: undefined})
 	}
 	else {
 		const decoded = getDecodedName(cooki)
-
 		connection.query("SELECT * FROM ajax_chat", function(err, row) {
 			if(err) return console.log(err)
-			res.render('log/logged.ejs', {row: row, my_name: decoded, count: row.length})
+			res.render('pages/logged.ejs', {row: row, my_name: decoded, count: row.length})
 		});
 	}
 	
 })
 
 app.get('/login', (req, res) => {
-	res.render('log/unlogged.ejs', {error: undefined})
+	res.render('pages/unlogged.ejs', {error: undefined})
 })
 
 app.get('/logall', (req, res) => {
-	res.render('log/logall.ejs', {error: undefined})
+	res.render('pages/logall.ejs', {error: undefined})
 })
 
 app.get('/chat', (req, res) => {
@@ -76,7 +74,7 @@ app.get('/chat', (req, res) => {
 	var query = "SELECT * FROM `one_to_one` WHERE name = '"+ decoded +"' AND second_name = '"+ second +"' OR  name = '"+ second +"' AND second_name = '"+ decoded +"'";
 	var result = connection.query(query, function(err, row) {
 		if(err) return console.log(err)
-		res.render('log/anonim.ejs', {row: row, second: second, my_name: decoded, count: row.length})
+		res.render('pages/anonim.ejs', {row: row, second: second, my_name: decoded, count: row.length})
 	});
 })
 
@@ -92,12 +90,12 @@ app.get("/profile", (req, res) => {
 	var login = req.query.login;
 	if(decoded == login) {
 		connection.query("SELECT * FROM `users` WHERE login = '"+ login +"'", function(err, row) {
-			res.render('profile.ejs', {row: row, name: decoded})
+			res.render('pages/profile.ejs', {row: row, name: decoded})
 		})
 	}
 	else {
 		connection.query("SELECT * FROM `users` WHERE login = '"+ login +"'", function(err, row) {
-			res.render('profile_guest.ejs', {row: row, name: decoded})
+			res.render('pages/profile_guest.ejs', {row: row, name: decoded})
 		})
 	}
 })
@@ -121,7 +119,7 @@ app.post("/profile", function (req, res) {
 		  }
 		  else {
 		  	connection.query("UPDATE `users` SET `image`='"+ filedata.filename +"' WHERE login = '"+ login +"' ")
-		    res.render('checked.ejs', {row: row, name: decoded, file: filedata.filename})
+		    res.render('pages/checked.ejs', {row: row, name: decoded, file: filedata.filename})
 		  }
 
 		}
@@ -135,7 +133,7 @@ app.post("/profile", function (req, res) {
 			  }
 			  else {
 			  	connection.query("UPDATE `users` SET `image`='"+ filedata.filename +"' WHERE login = '"+ login +"' ")
-			    res.render('checked.ejs', {row: row, name: decoded, file: filedata.filename})
+			    res.render('pages/checked.ejs', {row: row, name: decoded, file: filedata.filename})
 			  }
 			}
 			else {
@@ -145,7 +143,7 @@ app.post("/profile", function (req, res) {
 				}
 				else {
 					connection.query("UPDATE `users` SET `image`='"+ filedata.filename +"' WHERE login = '"+ login +"' ")
-			  	res.render('checked.ejs', {row: row, name: decoded, file: filedata.filename})
+			  	res.render('pages/checked.ejs', {row: row, name: decoded, file: filedata.filename})
 				}
 				
 			}
