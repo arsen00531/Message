@@ -1,7 +1,7 @@
 module.exports = exports = {
-  host : 'localhost',
+  host : '127.0.0.2:3308',
   user : 'root',
-  password : '',
+  password : '12345',
   database : 'chat',
   port: 3306
 };
