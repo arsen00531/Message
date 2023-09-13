@@ -22,4 +22,4 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.set('views', __dirname);
 
-server.listen(PORT)
+server.listen(PORT, () => console.log(PORT))
