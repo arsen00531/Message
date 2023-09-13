@@ -6,7 +6,10 @@ const mysql = require('mysql');
 const connect = require('../db/db')
 const getDecodedName = require('../middlewares/getDecodedName')
 
-const connection = mysql.createPool(connect, (err) => {console.log(err)});
+const connection = mysql.createPool(connect, (err) => {
+	if (err) throw err
+	console.log('connect')
+});
 
 router.get('/', (req, res) => {
 	var cooki = req.headers.cookie;
