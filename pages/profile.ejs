@@ -55,9 +55,6 @@
                             </div>
                             <hr>
                             <div class="set_and_help">
-                                <div style="">
-                                    <?php require('check.php'); ?>
-                                </div>
                                 <p><a href="/" style="text-decoration: none; color: #000;">Главная</a></p>
                                 <p><a href="/users" style="z-index: 101; text-decoration: none; color: #000;">Чаты</a></p>
                                 <p><a href="/logout" style="text-decoration: none; color: #000;">Выйти</a></p>
@@ -76,7 +73,7 @@
                 <div class="col-2"></div>
                 <div class="col-2 with_img">
                     <div class="image">
-                        <img src="user_images/<%= row[0].image %>" alt="some" class='user_img'><a href="#" style="position: relative; left: 13%; text-decoration: none; bottom: 40px;">Загрузить фотографию</a>
+                        <img src="user_images/<%= row[0].image %>.png" alt="some" class='user_img'><a href="#" style="position: relative; left: 13%; text-decoration: none; bottom: 40px;">Загрузить фотографию</a>
                     </div>
                     <h5 class="text-center" style="margin-bottom: 15px;"><a href="#" class="settings">Редактировать</a></h5>
                 </div>
@@ -85,10 +82,6 @@
                         <div class="some_flex">
                             <div>
                                 <h1><%= name %></h1>
-                            </div>
-                            
-                            <div>
-                                <?php require('online.php'); ?>
                             </div>
                             
                         </div>

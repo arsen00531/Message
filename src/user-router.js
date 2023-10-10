@@ -65,7 +65,7 @@ router.post("/profile", function (req, res) {
 	const login = req.query.login;
 	const filedata = req.file;
 	connection.query(`SELECT * FROM users WHERE login = '${login}'`, function(err, row) {
-		if (row[0].image == "camera.png") {
+		if (row[0].image == "") {
 			if(filedata == undefined) {
 				res.send("Ошибка при загрузке файла");
 			}
