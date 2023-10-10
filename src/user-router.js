@@ -67,7 +67,7 @@ router.post("/profile", function (req, res) {
 	connection.query(`SELECT * FROM users WHERE login = '${login}'`, function(err, row) {
 		if (row[0].image == "") {
 			if(filedata == undefined) {
-				res.send("Ошибка при загрузке файла");
+				res.send("Ошибка при загрузке файла1");
 			}
 			else {
 				connection.query(`UPDATE users SET image = '${filedata.filename}' WHERE login = '${login}' `)
@@ -81,7 +81,7 @@ router.post("/profile", function (req, res) {
 				fs.unlinkSync(path1);
 				const filedata = req.file;
 				if(!filedata) {
-					res.send("Ошибка при загрузке файла");
+					res.send("Ошибка при загрузке файла2");
 				}
 				else {
 					connection.query(`UPDATE users SET image = '${filedata.filename}' WHERE login = '${login}' `)
@@ -91,7 +91,7 @@ router.post("/profile", function (req, res) {
 			else {
 				const filedata = req.file;
 				if(!filedata) {
-					res.send("Ошибка при загрузке файла");
+					res.send("Ошибка при загрузке файла3");
 				}
 				else {
 					connection.query(`UPDATE users SET image = '${filedata.filename}' WHERE login = '${login}' `)
