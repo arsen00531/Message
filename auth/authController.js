@@ -1,7 +1,8 @@
 const mysql = require('mysql')
-const connect = require('../db/db.js')
 const jwt = require('jsonwebtoken')
+const connect = require('../db/db')
 const getDecodedName = require('../middlewares/getDecodedName')
+const url = require('../db/url')
 
 const connection = mysql.createPool(connect);
 
@@ -16,7 +17,7 @@ class authController {
 				}
 				else {
 					const user = connection.query(`INSERT INTO users (login, password) VALUES ('${userName}', '${password}') `);
-					res.redirect("http://localhost:3000/")
+					res.redirect(url)
 				}
 			});
 		}
@@ -40,7 +41,7 @@ class authController {
 					    	// password correct
 					    	const token = jwt.sign(userName, 'shhhhh');
 							res.cookie(row[0].id, token)
-							res.redirect("http://localhost:3000/")
+							res.redirect(url)
 						}
 						else {
 							// Password is not correct
@@ -68,7 +69,7 @@ class authController {
 	async logout(req, res) {
 		try {
 			res.clearCookie(req.headers.cookie.split(";")[0]);
-            res.redirect("http://localhost:3000/")
+            res.redirect(url)
 		}
 
 		catch(e) {

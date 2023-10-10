@@ -1,0 +1,1 @@
+module.exports = 'https://message-production-860c.up.railway.app/'
