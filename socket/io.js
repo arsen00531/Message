@@ -18,20 +18,19 @@ module.exports = (server) => {
         });
 
         socket.on('send mess', function (data) {
-            connection.query("SELECT * FROM `ajax_chat`", function(err, row) {
+            connection.query("SELECT * FROM ajax_chat", function(err, row) {
                 io.sockets.emit('add mess', {mess: data.mess, name: data.name, count: row.length + 1});
             })
             
-            var query = "INSERT INTO `ajax_chat` (name, text) VALUES ('"+ data.name +"', '"+ data.mess +"')"
-            connection.query(query);
+            connection.query(`INSERT INTO ajax_chat (name, text) VALUES (${data.name}', '${data.mess}')`);
         });
 
         // one_to_one
         socket.on('send', function(data) {
-            var decoded = jwt.decode(data.name)
-            connection.query(" INSERT INTO `one_to_one` (text, name, second_name) VALUES ('"+ data.mess +"', '"+ decoded +"', '"+ data.second_name +"')" )
+            let decoded = jwt.decode(data.name)
+            connection.query(`INSERT INTO one_to_one (text, name, second_name) VALUES ('${data.mess}', '${decoded}', '${data.second_name}')` )
 
-            var query = "SELECT * FROM `one_to_one` WHERE name = '"+ decoded +"' AND second_name = '"+ data.second_name +"' OR  name = '"+ data.second_name +"' AND second_name = '"+ decoded +"'";
+            const query = `SELECT * FROM one_to_one WHERE name = '${decoded}' AND second_name = '${data.second_name}' OR name = '${data.second_name}' AND second_name = '${decoded}'`;
 
             connection.query(query, function(err, row) {
                 io.sockets.emit('give', {mess: data.mess, name: decoded, count: row.length + 1})

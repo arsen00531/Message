@@ -10,12 +10,12 @@ class authController {
 		try {
 			const userName = req.body.userName;
 			const password = req.body.password;
-			connection.query("SELECT * FROM `users` WHERE login = '"+ userName +"' ", function(err, row) {
+			connection.query(`SELECT * FROM users WHERE login = '${userName}' `, function(err, row) {
 				if(row.length > 0) {
 					res.render('pages/logall.ejs', {error: "Такой пользователь уже существует"})
 				}
 				else {
-					const user = connection.query("INSERT INTO `users` (login, password) VALUES ('"+ userName +"', '"+ password +"') ");
+					const user = connection.query(`INSERT INTO users (login, password) VALUES ('${userName}', '${password}') `);
 					res.redirect("http://localhost:3000/")
 				}
 			});
@@ -30,7 +30,7 @@ class authController {
 			const userName = req.body.login;
 			const password = req.body.password_log;
 			
-			const user = connection.query("SELECT * FROM `users` WHERE login = '"+ userName +"' ", function(err, row) {
+			const user = connection.query(`SELECT * FROM users WHERE login = '${userName}' `, function(err, row) {
 				if(row.length > 0) {
 					// found user
 					if(row[0].login == userName) {
@@ -67,8 +67,6 @@ class authController {
 
 	async logout(req, res) {
 		try {
-			var cookies = req.headers.cookie.split(";");
-
 			res.clearCookie(req.headers.cookie.split(";")[0]);
             res.redirect("http://localhost:3000/")
 		}
@@ -81,17 +79,8 @@ class authController {
 
 	async users(req, res) {
 		try {
-			// get users
-		// 	var cooki = req.headers.cookie.split(";");
-		// 	for (var i = 0; i < cooki.length; i++) {
-		// 	    var cookie = cooki[i];
-		// 	    var eqPos = cookie.indexOf("=") + 1;
-		// 	    var leng = cookie.length - eqPos
-		// 	    var name = eqPos > -1 ? cookie.substr(eqPos, leng) : cookie;
-		// 	}
-		//   var decoded = jwt.decode(name)
 		const decoded = jwt.decode(getDecodedName(req.headers.cookie))
-		connection.query("SELECT * FROM `users` WHERE login NOT IN ('"+ decoded +"')", function(err, row) {
+		connection.query(`SELECT * FROM users WHERE login NOT IN ('${decoded}')`, function(err, row) {
 		  		if(err) return console.log(err)
 		  		res.render('pages/users.ejs', {row: row, name: decoded})
 			});

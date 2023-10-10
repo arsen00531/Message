@@ -12,7 +12,7 @@ const connection = mysql.createPool(connect, (err) => {
 });
 
 router.get('/', (req, res) => {
-	var cooki = req.headers.cookie;
+	const cooki = req.headers.cookie;
 	if(cooki === undefined) {
 		res.render('pages/unlogged.ejs', {error: undefined})
 	}
@@ -38,8 +38,8 @@ router.get('/chat', (req, res) => {
 	const second = req.query.id
 	const decoded = jwt.decode(getDecodedName(req.headers.cookie))
 
-	var query = "SELECT * FROM `one_to_one` WHERE name = '"+ decoded +"' AND second_name = '"+ second +"' OR  name = '"+ second +"' AND second_name = '"+ decoded +"'";
-	var result = connection.query(query, function(err, row) {
+	const query = `SELECT * FROM one_to_one WHERE name = '${decoded}' AND second_name = '${second}' OR  name = '${second}' AND second_name = '${decoded}'`;
+	connection.query(query, function(err, row) {
 		if(err) return console.log(err)
 		res.render('pages/anonim.ejs', {row: row, second: second, my_name: decoded, count: row.length})
 	});
@@ -47,14 +47,14 @@ router.get('/chat', (req, res) => {
 
 router.get("/profile", (req, res) => {
 	const decoded = jwt.decode(getDecodedName(req.headers.cookie))
-	var login = req.query.login;
+	const login = req.query.login;
 	if(decoded == login) {
-		connection.query("SELECT * FROM `users` WHERE login = '"+ login +"'", function(err, row) {
+		connection.query(`SELECT * FROM users WHERE login = '${login}'`, function(err, row) {
 			res.render('pages/profile.ejs', {row: row, name: decoded})
 		})
 	}
 	else {
-		connection.query("SELECT * FROM `users` WHERE login = '"+ login +"'", function(err, row) {
+		connection.query(`SELECT * FROM users WHERE login = '${login}'`, function(err, row) {
 			res.render('pages/profile_guest.ejs', {row: row, name: decoded})
 		})
 	}
@@ -64,38 +64,37 @@ router.post("/profile", function (req, res) {
 	const decoded = jwt.decode(getDecodedName(req.headers.cookie))
 	const login = req.query.login;
 	const filedata = req.file;
-	connection.query("SELECT * FROM `users` WHERE login = '"+ login +"'", function(err, row) {
+	connection.query(`SELECT * FROM users WHERE login = '${login}'`, function(err, row) {
 		if (row[0].image == "camera.png") {
-			var filedata = req.file;
-		  if(filedata == undefined) {
-		    res.send("Ошибка при загрузке файла");
-		  }
-		  else {
-		  	connection.query("UPDATE `users` SET `image`='"+ filedata.filename +"' WHERE login = '"+ login +"' ")
-		    res.render('pages/checked.ejs', {row: row, name: decoded, file: filedata.filename})
-		  }
+			if(filedata == undefined) {
+				res.send("Ошибка при загрузке файла");
+			}
+			else {
+				connection.query(`UPDATE users SET image = '${filedata.filename}' WHERE login = '${login}' `)
+				res.render('pages/checked.ejs', {row: row, name: decoded, file: filedata.filename})
+			}
 
 		}
 		else {
-			var path1 = "user_images/" + row[0].image
+			const path1 = `user_images/${row[0].image}`
 			if(fs.existsSync(path1)) {
 				fs.unlinkSync(path1);
-				var filedata = req.file;
-			  if(!filedata) {
-			    res.send("Ошибка при загрузке файла");
-			  }
-			  else {
-			  	connection.query("UPDATE `users` SET `image`='"+ filedata.filename +"' WHERE login = '"+ login +"' ")
-			    res.render('pages/checked.ejs', {row: row, name: decoded, file: filedata.filename})
-			  }
-			}
-			else {
-				var filedata = req.file;
+				const filedata = req.file;
 				if(!filedata) {
 					res.send("Ошибка при загрузке файла");
 				}
 				else {
-					connection.query("UPDATE `users` SET `image`='"+ filedata.filename +"' WHERE login = '"+ login +"' ")
+					connection.query(`UPDATE users SET image = '${filedata.filename}' WHERE login = '${login}' `)
+					res.render('pages/checked.ejs', {row: row, name: decoded, file: filedata.filename})
+				}
+			}
+			else {
+				const filedata = req.file;
+				if(!filedata) {
+					res.send("Ошибка при загрузке файла");
+				}
+				else {
+					connection.query(`UPDATE users SET image = '${filedata.filename}' WHERE login = '${login}' `)
 			  	res.render('pages/checked.ejs', {row: row, name: decoded, file: filedata.filename})
 				}
 				

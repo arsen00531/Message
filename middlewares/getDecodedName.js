@@ -7,6 +7,5 @@ module.exports = (cook) => {
         let leng = cookie.length - eqPos
         name = eqPos > -1 ? cookie.substr(eqPos, leng) : cookie
     }
-    console.log(name)
     return name
 }
