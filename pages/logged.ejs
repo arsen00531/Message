@@ -61,7 +61,7 @@
 
   <div class="messages">
     <div class="all_mess">
-      <% for(var i=0; i<row.length;i++) {%>
+      <% for(let i=0; i<row.length;i++) {%>
         <a class="user_mess" href="/profile?login=<%= row[i].name %>"><%= row[i].name %></a>
         <p class="some_p"><%= row[i].text %></p>
       <% } %>
@@ -87,41 +87,41 @@
     $(function () {
       if(<%= count %> < 11) {
         document.body.style.overflow = 'hidden'
-        var wind = $(document).height()
+        let wind = $(document).height()
         window.scrollTo(0, wind)
       }
 
       else {
-        var wind = $(document).height()
+        let wind = $(document).height()
         window.scrollTo(0, wind)
-        var massager = document.querySelector('.messages')
+        let massager = document.querySelector('.messages')
         massager.style.bottom = '85%'
         document.body.style.overflow = 'auto'
       }
 
       if(<%= count %> === 1) {
         document.body.style.overflow = 'hidden'
-        var wind = $(document).height()
+        let wind = $(document).height()
         window.scrollTo(0, wind)
 
-        var massages = document.querySelector('.messages')
+        let massages = document.querySelector('.messages')
         massages.style.bottom = '20%'
       }
 
-      var wind = $(document).height()
+      let wind = $(document).height()
       window.scrollTo(0 , wind)
 
       document.addEventListener('resize', function() {
-        var wind = $(document).height()
+        let wind = $(document).height()
         window.scrollTo(0 , wind)
       })
 
-      var socket = io.connect();
-      var $form = $('#mess-form');
-      var $textarea = $('#message');
-      var $all_messages = $('.all_mess');
+      let socket = io.connect();
+      let $form = $('#mess-form');
+      let $textarea = $('#message');
+      let $all_messages = $('.all_mess');
 
-      var login = "<%= my_name %>"
+      let login = "<%= my_name %>"
 
       $('textarea').on('keydown', function( el ) {
         if( el.keyCode === 13 ) {
@@ -133,10 +133,9 @@
       });
 
       document.addEventListener("keyup", function (e) {
+        if($textarea.val() === "") return;
         e.preventDefault();
-
-        if(login === "" || $textarea.val() === "") return;
-
+        
         if(e.keyCode === 13) {
           e.preventDefault();
           socket.emit('send mess', {mess: $textarea.val(), name: login});
@@ -144,10 +143,10 @@
         }
       });
 
-      var text = document.getElementById('message');
+      let text = document.getElementById('message');
       text.addEventListener('keyup', function(e) {
-        var message = $("#message").val()
-        var submit = document.querySelector(".submit")
+        let message = $("#message").val()
+        let submit = document.querySelector(".submit")
         if(message == "") {
           submit.style.transform = "scale(0)"
           submit.style.transition = "all 0.3s"
@@ -158,8 +157,8 @@
       })
 
       text.addEventListener('keydown', function(e) {
-        var message = $("#message").val()
-        var submit = document.querySelector(".submit")
+        let message = $("#message").val()
+        let submit = document.querySelector(".submit")
         if(message == "") {
           submit.style.transform = "scale(0)"
           submit.style.transition = "all 0.3s"
@@ -171,7 +170,7 @@
 
       $(".account_not_log").on("click", function (e) {
         e.preventDefault()
-        var reg_and_log = $(".reg_and_log")
+        let reg_and_log = $(".reg_and_log")
         reg_and_log.toggleClass("clicked")
       })
 
@@ -187,30 +186,30 @@
       });
 
       socket.on('add mess', function (data) {
-        var some = $(".some")
+        let some = $(".some")
         some.before("<a class='user_mess'>" + data.name + "</a>");
         some.before("<p class='some_p'>" + data.mess + "</p>")
 
         if(data.count < 11) {
           document.body.style.overflow = 'hidden'
-          var wind = $(document).height()
+          let wind = $(document).height()
           window.scrollTo(0, wind)
         }
         
         else {
-          var wind = $(document).height()
+          let wind = $(document).height()
           window.scrollTo(0, wind)
-          var massager = document.querySelector('.messages')
+          let massager = document.querySelector('.messages')
           massager.style.bottom = '85%'
           document.body.style.overflow = 'auto'
         }
 
         if(data.count === 1) {
           document.body.style.overflow = 'hidden'
-          var wind = $(document).height()
+          let wind = $(document).height()
           window.scrollTo(0, wind)
 
-          var massager = document.querySelector('.messages')
+          let massager = document.querySelector('.messages')
           massager.style.bottom = '20%'
         }
       });

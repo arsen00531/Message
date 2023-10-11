@@ -5,6 +5,7 @@ const fs = require('fs');
 const mysql = require('mysql');
 const connect = require('../db/db')
 const getDecodedName = require('../middlewares/getDecodedName')
+const check = require('../middlewares/check')
 
 const connection = mysql.createPool(connect, (err) => {
 	if (err) throw err
@@ -12,15 +13,15 @@ const connection = mysql.createPool(connect, (err) => {
 });
 
 router.get('/', (req, res) => {
-	const cooki = req.headers.cookie;
-	if(cooki === undefined) {
+	const cookieName = check(req.headers.cookie, jwt)
+
+	if(cookieName === null) {
 		res.render('pages/unlogged.ejs', {error: undefined})
 	}
 	else {
-		const decoded = jwt.decode(getDecodedName(cooki))
 		connection.query("SELECT * FROM ajax_chat", function(err, row) {
 			if(err) return console.log(err)
-			res.render('pages/logged.ejs', {row: row, my_name: decoded, count: row.length})
+			res.render('pages/logged.ejs', {row: row, my_name: cookieName, count: row.length})
 		})
 	}
 	
@@ -65,7 +66,7 @@ router.post("/profile", function (req, res) {
 	const login = req.query.login;
 	const filedata = req.file;
 	connection.query(`SELECT * FROM users WHERE login = '${login}'`, function(err, row) {
-		if (row[0].image == "") {
+		if (row[0].image == 1) {
 			if(filedata == undefined) {
 				res.send("Ошибка при загрузке файла1");
 			}

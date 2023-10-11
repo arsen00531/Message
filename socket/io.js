@@ -22,7 +22,7 @@ module.exports = (server) => {
                 io.sockets.emit('add mess', {mess: data.mess, name: data.name, count: row.length + 1});
             })
             
-            connection.query(`INSERT INTO ajax_chat (name, text) VALUES (${data.name}', '${data.mess}')`);
+            connection.query(`INSERT INTO ajax_chat (name, text) VALUES ('${data.name}', '${data.mess}')`);
         });
 
         // one_to_one
