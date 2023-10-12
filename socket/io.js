@@ -1,6 +1,7 @@
 module.exports = (server) => {
     const mysql = require('mysql');
     const connect = require('../db/db.js')
+    const jwt = require('jsonwebtoken')
 
     const connection = mysql.createPool(connect, (err) => {console.log(err)});
 

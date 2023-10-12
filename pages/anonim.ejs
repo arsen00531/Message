@@ -158,9 +158,8 @@
       });
 
 	    document.addEventListener("keyup", function (e) {
+        if($textarea.val() === "") return;
         e.preventDefault();
-
-        if(login === "" || $textarea.val() === "") return;
 
         if(e.keyCode === 13) {
           e.preventDefault();
