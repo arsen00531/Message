@@ -96,7 +96,7 @@ router.post("/profile", function (req, res) {
 				}
 				else {
 					connection.query(`UPDATE users SET image = '${filedata.filename}' WHERE login = '${login}' `)
-			  	res.render('pages/checked.ejs', {row: row, name: decoded, file: filedata.filename})
+			  		res.render('pages/checked.ejs', {row: row, name: decoded, file: filedata.filename})
 				}
 				
 			}
