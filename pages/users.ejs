@@ -54,9 +54,9 @@
         				<div class="flex" style="display: flex;">
         					<% for(var i=0; i<row.length;i++) {%>
                                 <div class="user_div">
-                                    <a href="/profile?login=<%= row[i].login %>"><img src="../user_images/<%= row[i].image %>" class="user_img" alt="image"></a>
+                                    <a href="/profile?login=<%= row[i].login %>"><img src="../user_images/<%=  row[i].image || 'camera.png'  %>" class="user_img" alt="image"></a>
                                     <div class="div_flex">
-                                        <a href='/profile?login=<%= row[i].login %>&img=<%= row[i].image %>' class='link'>
+                                        <a href='/profile?login=<%= row[i].login %>&img=<%=  row[i].image || 'camera.png'  %>' class='link'>
                                             <p class='user_p'><%= row[i].login %></p>
                                         </a>
                                         <a href='/chat?id=<%= row[i].login %>' class='user_link'>
