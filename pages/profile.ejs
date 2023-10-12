@@ -73,7 +73,7 @@
                 <div class="col-2"></div>
                 <div class="col-2 with_img">
                     <div class="image">
-                        <img src="user_images/<%= row[0].image %>.png" alt="some" class='user_img'><a href="#" style="position: relative; left: 13%; text-decoration: none; bottom: 40px;">Загрузить фотографию</a>
+                        <img src="user_images/<%= row[0].image || 'camera.png' %>" alt="some" class='user_img'><a href="#" style="position: relative; left: 13%; text-decoration: none; bottom: 40px;">Загрузить фотографию</a>
                     </div>
                     <h5 class="text-center" style="margin-bottom: 15px;"><a href="#" class="settings">Редактировать</a></h5>
                 </div>
