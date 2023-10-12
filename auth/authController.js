@@ -68,8 +68,14 @@ class authController {
 
 	async logout(req, res) {
 		try {
-			res.clearCookie(req.headers.cookie.split(";")[0]);
-            res.redirect(url)
+			const cookie = ''
+			req.headers.cookie.split(';').forEach((value) => {
+				const decoded = jwt.decode(value.split('=')[1])
+				if (decoded != null) {
+					res.clearCookie(req.headers.cookie.split(";")[0]);
+            		res.redirect(url)
+				}
+			})
 		}
 
 		catch(e) {
